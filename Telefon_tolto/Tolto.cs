@@ -4,9 +4,9 @@ namespace Telefon_tolto
 {
     public class Tolto
     {
-        public string Gyartmany { get; set; }
-        public string Modell { get; set; }
-        public int Watt { get; set; }
+        public string Gyartmany;
+        public string Modell;
+        public int Watt;
 
         public Tolto(string gyartmany, string modell, int watt)
         {

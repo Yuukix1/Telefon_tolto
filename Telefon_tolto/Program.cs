@@ -5,160 +5,115 @@ namespace Telefon_tolto
 {
     public class Program
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
-            List<Telefon> telefonok = new List<Telefon>
-            {
-                new Telefon("Samsung", "Galaxy S21", 30),
-                new Telefon("Apple", "iPhone 13", 50),
-                new Telefon("Xiaomi", "12 Pro", 20)
-            };
+            // ===== 1. ADATOK INICIALIZÁLÁSA =====
+            // Telefonok listája létrehozása
+            List<Telefon> telefonok = new List<Telefon>();
+            telefonok.Add(new Telefon("Samsung", "Galaxy", 30));
+            telefonok.Add(new Telefon("Apple", "iPhone", 50));
+            telefonok.Add(new Telefon("Xiaomi", "Note", 20));
 
-            List<Tolto> toltok = new List<Tolto>
-            {
-                new Tolto("Samsung", "25W", 25),
-                new Tolto("Apple", "20W", 20),
-                new Tolto("Xiaomi", "67W", 67)
-            };
+            // Töltők listája létrehozása
+            List<Tolto> toltok = new List<Tolto>();
+            toltok.Add(new Tolto("Samsung", "25W", 25));
+            toltok.Add(new Tolto("Apple", "20W", 20));
+            toltok.Add(new Tolto("Xiaomi", "67W", 67));
 
-            int kivalasztottTelefonIndex = -1;
-            bool kilepes = false;
-
-            while (!kilepes)
+            // ===== 2. FŐCIKLUS - A MENÜ =====
+            // Végtelenített ciklus amíg a felhasználó ki nem lép
+            while (true)
             {
                 Console.Clear();
-                Console.WriteLine("=== TELEFON TOLTO ===\n");
-
-                if (kivalasztottTelefonIndex >= 0)
-                {
-                    Telefon t = telefonok[kivalasztottTelefonIndex];
-                    Console.WriteLine("Jelenlegi: " + t.Gyartmany + " " + t.Modell + " (" + t.Akkumulator + "%)");
-                    if (t.Tolto != null)
-                        Console.WriteLine("Töltő: " + t.Tolto.Gyartmany + " " + t.Tolto.Modell + "\n");
-                    else
-                        Console.WriteLine("Töltő: nincs\n");
-                }
-
-                Console.WriteLine("1. Telefonok listázása");
-                Console.WriteLine("2. Telefon kiválasztása");
-                Console.WriteLine("3. Töltő csatlakoztatása");
-                Console.WriteLine("4. Töltő lecsatlakoztatása");
-                Console.WriteLine("5. Töltés");
-                Console.WriteLine("0. Kilépés");
-                Console.Write("\nVálasztás: ");
+                Console.WriteLine("=== MENU ===");
+                Console.WriteLine("1 - Telefonok");
+                Console.WriteLine("2 - Tolto csatlakoztatas");
+                Console.WriteLine("3 - Toltes");
+                Console.WriteLine("0 - Kilepes");
+                Console.Write("Valasztas: ");
 
                 string input = Console.ReadLine();
-                if (!int.TryParse(input, out int valasztas))
+
+                // ===== 3.1 OPCIÓ 1: TELEFONOK LISTÁZÁSA =====
+                if (input == "1")
                 {
-                    Console.WriteLine("Érvénytelen!");
+                    Console.Clear();
+                    Console.WriteLine("Telefonok:");
+                    // Végigmegyünk az összes telefonon
+                    for (int i = 0; i < telefonok.Count; i++)
+                    {
+                        Console.WriteLine((i + 1) + ". " + telefonok[i].Gyartmany + " " + telefonok[i].Modell + " - " + telefonok[i].Akkumulator + "%");
+                    }
                     Console.ReadLine();
-                    continue;
                 }
-
-                switch (valasztas)
+                // ===== 3.2 OPCIÓ 2: TÖLTŐ CSATLAKOZTATÁSA =====
+                else if (input == "2")
                 {
-                    case 1:
-                        Console.Clear();
-                        Console.WriteLine("=== TELEFONOK ===\n");
-                        for (int i = 0; i < telefonok.Count; i++)
-                        {
-                            Telefon t = telefonok[i];
-                            string jel = (i == kivalasztottTelefonIndex) ? " *" : "";
-                            Console.WriteLine((i + 1) + ". " + t.Gyartmany + " " + t.Modell + " (" + t.Akkumulator + "%)" + jel);
-                        }
-                        Console.WriteLine("\nENTER...");
-                        Console.ReadLine();
-                        break;
+                    Console.Clear();
+                    // Töltő kiválasztása
+                    Console.WriteLine("Tolto valasztasa:");
+                    for (int i = 0; i < toltok.Count; i++)
+                    {
+                        Console.WriteLine((i + 1) + ". " + toltok[i].Gyartmany + " " + toltok[i].Modell + " " + toltok[i].Watt + "W");
+                    }
+                    Console.Write("Sorszam: ");
+                    int toltoIdx = int.Parse(Console.ReadLine()) - 1;
 
-                    case 2:
-                        Console.Clear();
-                        Console.WriteLine("=== TELEFON KIVÁLASZTÁSA ===\n");
-                        for (int i = 0; i < telefonok.Count; i++)
-                        {
-                            Telefon t = telefonok[i];
-                            Console.WriteLine((i + 1) + ". " + t.Gyartmany + " " + t.Modell);
-                        }
-                        Console.Write("\nMelyik? (1-" + telefonok.Count + "): ");
-                        if (int.TryParse(Console.ReadLine(), out int idx) && idx > 0 && idx <= telefonok.Count)
-                        {
-                            kivalasztottTelefonIndex = idx - 1;
-                            Console.WriteLine("Kiválasztva!");
-                            Console.ReadLine();
-                        }
-                        else
-                            Console.ReadLine();
-                        break;
+                    // Telefon kiválasztása
+                    Console.WriteLine("\nTelefon valasztasa:");
+                    for (int i = 0; i < telefonok.Count; i++)
+                    {
+                        Console.WriteLine((i + 1) + ". " + telefonok[i].Gyartmany + " " + telefonok[i].Modell);
+                    }
+                    Console.Write("Sorszam: ");
+                    int telefonIdx = int.Parse(Console.ReadLine()) - 1;
 
-                    case 3:
-                        if (kivalasztottTelefonIndex < 0)
+                    // A kiválasztott telefonhoz hozzárendelünk egy töltőt
+                    telefonok[telefonIdx].Tolto = toltok[toltoIdx];
+                    Console.WriteLine("Csatlakoztatas keszult!");
+                    Console.ReadLine();
+                }
+                // ===== 3.3 OPCIÓ 3: TÖLTÉS =====
+                else if (input == "3")
+                {
+                    Console.Clear();
+                    // Telefon kiválasztása
+                    Console.WriteLine("Telefon valasztasa:");
+                    for (int i = 0; i < telefonok.Count; i++)
+                    {
+                        Console.WriteLine((i + 1) + ". " + telefonok[i].Gyartmany + " " + telefonok[i].Modell + " - " + telefonok[i].Akkumulator + "%");
+                    }
+                    Console.Write("Sorszam: ");
+                    int idx = int.Parse(Console.ReadLine()) - 1;
+
+                    // Ellenőrzés: van-e töltő csatlakoztatva?
+                    if (telefonok[idx].Tolto == null)
+                    {
+                        Console.WriteLine("Nincs tolto csatlakoztatva!");
+                    }
+                    else
+                    {
+                        // Töltési idő bekérése
+                        Console.Write("Hany perc? ");
+                        int perc = int.Parse(Console.ReadLine());
+
+                        // Az akkumulátor növelése a percek szerint
+                        telefonok[idx].Akkumulator = telefonok[idx].Akkumulator + perc;
+
+                        // Hogy ne menjen 100 fölé, korlátozunk
+                        if (telefonok[idx].Akkumulator > 100)
                         {
-                            Console.WriteLine("Előbb válassz telefont!");
-                            Console.ReadLine();
-                            break;
+                            telefonok[idx].Akkumulator = 100;
                         }
 
-                        Console.Clear();
-                        Console.WriteLine("=== TÖLTŐ CSATLAKOZTATÁSA ===\n");
-                        for (int i = 0; i < toltok.Count; i++)
-                        {
-                            Tolto to = toltok[i];
-                            Console.WriteLine((i + 1) + ". " + to.Gyartmany + " " + to.Modell + " (" + to.Watt + "W)");
-                        }
-                        Console.Write("\nMelyik? (1-" + toltok.Count + "): ");
-                        if (int.TryParse(Console.ReadLine(), out int tidx) && tidx > 0 && tidx <= toltok.Count)
-                        {
-                            telefonok[kivalasztottTelefonIndex].Tolto = toltok[tidx - 1];
-                            Console.WriteLine("Csatlakoztatva!");
-                            Console.ReadLine();
-                        }
-                        else
-                            Console.ReadLine();
-                        break;
-
-                    case 4:
-                        if (kivalasztottTelefonIndex < 0)
-                        {
-                            Console.WriteLine("Előbb válassz telefont!");
-                            Console.ReadLine();
-                            break;
-                        }
-                        telefonok[kivalasztottTelefonIndex].Tolto = null;
-                        Console.WriteLine("Lecsatlakoztatva!");
-                        Console.ReadLine();
-                        break;
-
-                    case 5:
-                        if (kivalasztottTelefonIndex < 0)
-                        {
-                            Console.WriteLine("Előbb válassz telefont!");
-                            Console.ReadLine();
-                            break;
-                        }
-                        if (telefonok[kivalasztottTelefonIndex].Tolto == null)
-                        {
-                            Console.WriteLine("Nincs töltő!");
-                            Console.ReadLine();
-                            break;
-                        }
-                        Console.Write("Hány percig? ");
-                        if (int.TryParse(Console.ReadLine(), out int perc) && perc > 0)
-                        {
-                            telefonok[kivalasztottTelefonIndex].Toltes(perc);
-                            Console.WriteLine("Töltés kész: " + telefonok[kivalasztottTelefonIndex].Akkumulator + "%");
-                            Console.ReadLine();
-                        }
-                        else
-                            Console.ReadLine();
-                        break;
-
-                    case 0:
-                        kilepes = true;
-                        break;
-
-                    default:
-                        Console.WriteLine("Érvénytelen!");
-                        Console.ReadLine();
-                        break;
+                        Console.WriteLine("Toltes kesz! " + telefonok[idx].Akkumulator + "%");
+                    }
+                    Console.ReadLine();
+                }
+                // ===== 3.4 OPCIÓ 0: KILÉPÉS =====
+                else if (input == "0")
+                {
+                    break;  // Kilépünk a while ciklusból, vége a programnak
                 }
             }
         }
