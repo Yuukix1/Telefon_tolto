@@ -27,7 +27,7 @@ namespace Telefon_tolto
             while (!kilepes)
             {
                 Console.Clear();
-                Console.WriteLine("=== TELEFON TOLTO SZIMULÁTOR ===\n");
+                Console.WriteLine("=== TELEFON TOLTO ===\n");
 
                 if (kivalasztottTelefonIndex >= 0)
                 {
